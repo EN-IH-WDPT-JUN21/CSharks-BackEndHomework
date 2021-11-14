@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(value ="*")
 @RestController
 @RequestMapping("/movie-app/users")
+
 public class UsersController {
 
     @Autowired

@@ -12,9 +12,11 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(value ="*")
 @Transactional
 @RestController
 @RequestMapping("/movie-app/playlists")
+
 public class PlaylistsController {
 
     @Autowired
