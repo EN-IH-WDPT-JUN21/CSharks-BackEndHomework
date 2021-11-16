@@ -1,13 +1,11 @@
 package com.csharks.moviesbackend.controller;
 
 import com.csharks.moviesbackend.PlaylistsService;
-import com.csharks.moviesbackend.UsersService;
+import com.csharks.moviesbackend.service.UsersService;
 import com.csharks.moviesbackend.dao.Playlists;
 import com.csharks.moviesbackend.dao.Users;
 import com.csharks.moviesbackend.dto.PlaylistsDTO;
-import com.csharks.moviesbackend.dto.UsersDTO;
-import com.csharks.moviesbackend.repository.MoviesRepository;
-import com.csharks.moviesbackend.repository.PlaylistsRepository;
+import com.csharks.moviesbackend.dto.RegisterUserDTO;
 import com.csharks.moviesbackend.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,8 +48,8 @@ http://localhost:8000/movie-app/users/register
 }
  */
     @PostMapping("/register")
-    public Users registerUser(@RequestBody UsersDTO usersDTO){
-        return usersService.registerUser(usersDTO);
+    public Users registerUser(@RequestBody RegisterUserDTO registerUserDTO){
+        return usersService.registerUser(registerUserDTO);
     }
 
 /*

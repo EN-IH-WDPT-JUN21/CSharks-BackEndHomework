@@ -6,10 +6,11 @@ import com.csharks.moviesbackend.dao.Users;
 import com.csharks.moviesbackend.repository.MoviesRepository;
 import com.csharks.moviesbackend.repository.PlaylistsRepository;
 import com.csharks.moviesbackend.repository.UsersRepository;
+import com.csharks.moviesbackend.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 
 @Component
@@ -21,8 +22,12 @@ public class Data {
     PlaylistsRepository playlistsRepository;
     @Autowired
     MoviesRepository moviesRepository;
+    @Autowired
+    private UsersService usersService;
 
-//    public void deleteRep(){
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+    //    public void deleteRep(){
 //        moviesRepository
 //        moviesRepository.deleteAll();
 //        playlistsRepository.deleteAll();
@@ -37,14 +42,17 @@ public class Data {
 //        moviesRepository.save(new Movies(104l));
 //        moviesRepository.save(new Movies(105l));
 
-        usersRepository.save(new Users("User#1", "user1@gmail.com", "user1", "pictureURL", "M"));
-        usersRepository.save(new Users("User#2", "user2@gmail.com", "user2", "pictureURL", "F"));
-        usersRepository.save(new Users("User#3", "user3@gmail.com", "user3", "pictureURL", "M"));
+        usersRepository.save(new Users("User#1", "user1@gmail.com", bCryptPasswordEncoder.encode("user1"), "pictureURL", "M"));
+        usersService.addRoleToUser("User#1", "USER");
+        usersRepository.save(new Users("User#2", "user2@gmail.com", bCryptPasswordEncoder.encode("user2"), "pictureURL", "F"));
+        usersRepository.save(new Users("User#3", "user3@gmail.com", bCryptPasswordEncoder.encode("user3"), "pictureURL", "M"));
 
+        usersRepository.save(new Users("Admin", "user1@gmail.com", bCryptPasswordEncoder.encode("admin"), "", ""));
+        usersService.addRoleToUser("Admin", "ADMIN");
 
-        playlistsRepository.save(new Playlists(usersRepository.getById(1l), "Funny", true, new Movies(101l), new Movies(105l)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2l), "Saturday evenings", false, new Movies(101l), new Movies(103l)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2l), "When it's raining", true, new Movies(104l), new Movies(105l)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(1L), "Funny", true, new Movies(101L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "Saturday evenings", false, new Movies(101L), new Movies(103L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
 
     }
 }
