@@ -1,4 +1,4 @@
-package com.csharks.moviesbackend;
+package com.csharks.moviesbackend.service;
 
 import com.csharks.moviesbackend.dao.Movies;
 import com.csharks.moviesbackend.dao.Playlists;
@@ -16,6 +16,7 @@ public class PlaylistsService {
 
     @Autowired
     PlaylistsRepository playlistsRepository;
+
     @Autowired
     MoviesRepository moviesRepository;
 
@@ -33,7 +34,7 @@ public class PlaylistsService {
         Movies newTitle = new Movies(titleId);
         playlist.get().getMovies().add(newTitle);
         playlistsRepository.save(playlist.get());
-        return  playlist.get();
+        return playlist.get();
     }
 
     public Playlists removeMovieFromPlaylist(Long playlistId, Long titleId) {

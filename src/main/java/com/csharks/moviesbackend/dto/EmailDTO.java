@@ -5,19 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.Set;
-
+import javax.validation.constraints.NotBlank;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class MoviesDTO {
+public class EmailDTO {
 
-    private Long titleId;
-    private String name;
-    private boolean visible;
-    private Set<PlaylistsDTO> playlists;
+    @NotBlank
+    private String emailAddress;
 
 }

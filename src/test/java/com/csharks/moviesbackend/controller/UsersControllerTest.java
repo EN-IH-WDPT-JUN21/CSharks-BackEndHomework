@@ -1,8 +1,8 @@
 package com.csharks.moviesbackend.controller;
 
-import com.csharks.moviesbackend.PlaylistsService;
-import com.csharks.moviesbackend.UsersService;
 import com.csharks.moviesbackend.repository.UsersRepository;
+import com.csharks.moviesbackend.service.PlaylistsService;
+import com.csharks.moviesbackend.service.UsersService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

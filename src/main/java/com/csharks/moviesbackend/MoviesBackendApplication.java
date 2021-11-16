@@ -6,20 +6,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MoviesBackendApplication
-		implements CommandLineRunner
-{
+public class MoviesBackendApplication implements CommandLineRunner {
 
-	@Autowired
-	Data data;
+    @Autowired
+    private Data data;
 
-	public static void main(String[] args) {
-		SpringApplication.run(MoviesBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MoviesBackendApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		//data.deleteRep();
-		data.populate();
-	}
+    @Override
+    public void run(String... args) throws Exception {
+        //data.deleteRep();
+        data.populate();
+    }
 }
