@@ -23,7 +23,6 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Boolean isActive;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
@@ -42,21 +41,20 @@ public class Users {
 
     // constructor for registration
     public Users(RegisterUserDTO registerUserDTO) {
-        this.isActive = true;
         this.username = registerUserDTO.getUsername();
         this.emailAddress = registerUserDTO.getEmailAddress();
         this.password = registerUserDTO.getPassword();
-        this.pictureUrl = "";
-        this.bio = "";
+        this.pictureUrl = "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png";
+        this.bio = "Add your bio here...";
         this.roles = new HashSet<>();
     }
 
     public Users(String username, String emailAddress, String password, String pictureUrl, String bio) {
-        this.isActive = true;
         this.username = username;
         this.emailAddress = emailAddress;
         this.password = password;
         this.pictureUrl = pictureUrl;
         this.bio = bio;
+        this.roles = new HashSet<>();
     }
 }

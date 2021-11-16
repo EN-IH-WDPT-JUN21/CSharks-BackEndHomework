@@ -18,10 +18,6 @@ public class MoviesDTO {
     private Long titleId;
     private String name;
     private boolean visible;
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-                mappedBy = "movies")
-
     private Set<PlaylistsDTO> playlists;
 
 }
