@@ -79,11 +79,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
-                .mvcMatchers("/login", "/register").permitAll()
+                .mvcMatchers("/login", "/register", "/movie-app/users/validate/**").permitAll()
                 .mvcMatchers(GET, "/movie-app/users/all").hasRole("ADMIN")
+
+                // Get user details
+                .mvcMatchers(GET, "/movie-app/users/username/current").hasAnyRole("ADMIN", "USER")
+
                 // Get user details
                 .mvcMatchers(GET, "/movie-app/users/{id}")
                 .access("@userFilter.checkUsernameFromUserId(authentication,#id)")
+
                 // Set user details
                 .mvcMatchers(PUT, "/movie-app/users/{id}/set")
                 .access("@userFilter.checkUsernameFromUserId(authentication,#id)")

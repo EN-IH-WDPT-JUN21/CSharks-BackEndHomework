@@ -47,7 +47,7 @@ public class Data {
         usersRepository.save(new Users("User#2", "user2@gmail.com", bCryptPasswordEncoder.encode("user2"), "pictureURL", "F"));
         usersRepository.save(new Users("User#3", "user3@gmail.com", bCryptPasswordEncoder.encode("user3"), "pictureURL", "M"));
 
-        usersRepository.save(new Users("Admin", "user1@gmail.com", bCryptPasswordEncoder.encode("admin"), "", ""));
+        usersRepository.save(new Users("Admin", "admin@gmail.com", bCryptPasswordEncoder.encode("admin"), "", ""));
         usersService.addRoleToUser("Admin", "ADMIN");
 
         playlistsRepository.save(new Playlists(usersRepository.getById(1L), "Funny", true, new Movies(101L), new Movies(105L)));
