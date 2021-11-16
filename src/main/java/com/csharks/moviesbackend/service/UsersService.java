@@ -14,13 +14,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
+// this and the private final objects create a constructor that does the same as the @Autowired (but only some times)
 public class UsersService {
     private final UsersRepository usersRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     // -------------------- Register / Login methods --------------------
     public Users registerUser(RegisterUserDTO registerUserDTO) {
@@ -54,7 +56,8 @@ public class UsersService {
         return storedUser.orElseThrow(() -> new RuntimeException("User not found."));
     }
 
-    public Users setUser(Long id, Optional<String> picture, Optional<String> bio, Optional<String> password, Optional<String> username) {
+    // -------------------- User update methods -------------------- // notes: removed username from update method
+    public Users setUser(Long id, Optional<String> picture, Optional<String> bio, Optional<String> password) {
         Optional<Users> updateUser = usersRepository.findById(id);
         if (picture.isPresent()) {
             updateUser.get().setPictureUrl(picture.get());
@@ -64,9 +67,6 @@ public class UsersService {
             usersRepository.save(updateUser.get());
         } else if (password.isPresent()) {
             updateUser.get().setPassword(password.get());
-            usersRepository.save(updateUser.get());
-        } else if (username.isPresent()) {
-            updateUser.get().setUsername(username.get());
             usersRepository.save(updateUser.get());
         }
         return updateUser.get();

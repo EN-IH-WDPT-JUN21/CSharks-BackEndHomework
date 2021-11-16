@@ -30,8 +30,37 @@ public class UsersController {
     @Autowired
     PlaylistsService playlistsService;
 
+// -------------------- Authentication / Authorisation / Register --------------------
+/*
+REGISTRATION (POST):
+http://localhost:8000/movie-app/users/register
+{
+    "username": "User#X",
+    "emailAddress": "userx@gmail.com",
+    "password": "userx"
+}
+ */
+    @PostMapping("/register")
+    public Users registerUser(@RequestBody RegisterUserDTO registerUserDTO){
+        return usersService.registerUser(registerUserDTO);
+    }
+
+    //  http://localhost:8000/movie-app/users/validate/username
+    @PostMapping("/validate/username")
+    public boolean isValidUsername(@RequestBody @Valid UsernameDTO usernameDTO) {
+        log.info("username: {}", usernameDTO.getUsername());
+        return usersRepository.existsByUsername(usernameDTO.getUsername());
+    }
+
+    //  http://localhost:8000/movie-app/users/validate/email
+    @PostMapping("/validate/email")
+    public boolean isValidEmail(@RequestBody @Valid EmailDTO emailDTO) {
+        log.info("email: {}", emailDTO.getEmailAddress());
+        return usersRepository.existsByEmailAddress(emailDTO.getEmailAddress());
+    }
 
 
+// -------------------- Authentication / Authorisation / Register --------------------
 //  http://localhost:8000/movie-app/users/all
     @GetMapping("/all")
     public List<Users> getAllUsers(){
@@ -52,33 +81,6 @@ public class UsersController {
         return usersService.getUserByUsername(username);
     }
 
-    //  http://localhost:8000/movie-app/users/validate/username/{username}
-    @PostMapping("/validate/username")
-    public boolean isValidUsername(@RequestBody @Valid UsernameDTO usernameDTO) {
-        log.info("username: {}", usernameDTO.getUsername());
-        return usersRepository.existsByUsername(usernameDTO.getUsername());
-    }
-
-    //  http://localhost:8000/movie-app/users/validate/email/{email}
-    @PostMapping("/validate/email")
-    public boolean isValidEmail(@RequestBody @Valid EmailDTO emailDTO) {
-        log.info("email: {}", emailDTO.getEmailAddress());
-        return usersRepository.existsByEmailAddress(emailDTO.getEmailAddress());
-    }
-
-/*
-REGISTRATION (POST):
-http://localhost:8000/movie-app/users/register
-{
-    "username": "User#X",
-    "emailAddress": "userx@gmail.com",
-    "password": "userx"
-}
- */
-    @PostMapping("/register")
-    public Users registerUser(@RequestBody RegisterUserDTO registerUserDTO){
-        return usersService.registerUser(registerUserDTO);
-    }
 
 /*
 http://localhost:8000/movie-app/users/4/set?picture=foto1
@@ -89,8 +91,8 @@ http://localhost:8000/movie-app/users/4/set?password=new_pass
     @PutMapping("/{id}/set")
     public Users setUser(@PathVariable Long id,
                          @RequestParam Optional<String> picture, @RequestParam Optional<String> bio,
-                         @RequestParam Optional<String> password, @RequestParam Optional<String> username){
-        return usersService.setUser(id, picture, bio, password, username);
+                         @RequestParam Optional<String> password){
+        return usersService.setUser(id, picture, bio, password);
     }
 
 /*  http://localhost:8000/movie-app/users/1/createPlaylist
