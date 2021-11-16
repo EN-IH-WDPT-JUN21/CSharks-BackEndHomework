@@ -1,8 +1,7 @@
 package com.csharks.moviesbackend.controller;
 
-import com.csharks.moviesbackend.PlaylistsService;
+import com.csharks.moviesbackend.service.PlaylistsService;
 import com.csharks.moviesbackend.dao.Playlists;
-import com.csharks.moviesbackend.dto.PlaylistsDTO;
 import com.csharks.moviesbackend.repository.MoviesRepository;
 import com.csharks.moviesbackend.repository.PlaylistsRepository;
 import org.springframework.beans.factory.annotation.Autowired;

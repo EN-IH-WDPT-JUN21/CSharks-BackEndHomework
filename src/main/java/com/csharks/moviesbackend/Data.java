@@ -17,11 +17,14 @@ import org.springframework.stereotype.Component;
 public class Data {
 
     @Autowired
-    UsersRepository usersRepository;
+    private UsersRepository usersRepository;
+
     @Autowired
-    PlaylistsRepository playlistsRepository;
+    private PlaylistsRepository playlistsRepository;
+
     @Autowired
-    MoviesRepository moviesRepository;
+    private MoviesRepository moviesRepository;
+
     @Autowired
     private UsersService usersService;
 
@@ -45,7 +48,9 @@ public class Data {
         usersRepository.save(new Users("User#1", "user1@gmail.com", bCryptPasswordEncoder.encode("user1"), "pictureURL", "M"));
         usersService.addRoleToUser("User#1", "USER");
         usersRepository.save(new Users("User#2", "user2@gmail.com", bCryptPasswordEncoder.encode("user2"), "pictureURL", "F"));
+        usersService.addRoleToUser("User#2", "USER");
         usersRepository.save(new Users("User#3", "user3@gmail.com", bCryptPasswordEncoder.encode("user3"), "pictureURL", "M"));
+        usersService.addRoleToUser("User#3", "USER");
 
         usersRepository.save(new Users("Admin", "admin@gmail.com", bCryptPasswordEncoder.encode("admin"), "", ""));
         usersService.addRoleToUser("Admin", "ADMIN");

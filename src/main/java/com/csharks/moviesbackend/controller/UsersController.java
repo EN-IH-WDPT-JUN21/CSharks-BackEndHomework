@@ -1,6 +1,6 @@
 package com.csharks.moviesbackend.controller;
 
-import com.csharks.moviesbackend.PlaylistsService;
+import com.csharks.moviesbackend.service.PlaylistsService;
 import com.csharks.moviesbackend.dto.EmailDTO;
 import com.csharks.moviesbackend.dto.UsernameDTO;
 import com.csharks.moviesbackend.service.UsersService;
@@ -15,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 

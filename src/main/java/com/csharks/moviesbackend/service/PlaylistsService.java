@@ -1,4 +1,4 @@
-package com.csharks.moviesbackend;
+package com.csharks.moviesbackend.service;
 
 import com.csharks.moviesbackend.dao.Movies;
 import com.csharks.moviesbackend.dao.Playlists;
