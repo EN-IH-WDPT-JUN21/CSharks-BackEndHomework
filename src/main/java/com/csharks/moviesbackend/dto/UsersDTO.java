@@ -17,7 +17,6 @@ public class UsersDTO {
     private String emailAddress;
     private String password;
     private String pictureUrl;
-    private LocalDate dateOfBirth;
-    private String gender;
+    private String bio;
     private List<PlaylistsDTO> playlistId;
 }

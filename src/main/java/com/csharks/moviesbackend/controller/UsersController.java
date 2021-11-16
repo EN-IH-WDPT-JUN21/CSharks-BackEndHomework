@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(value ="*")
 @RestController
 @RequestMapping("/movie-app/users")
 @Slf4j
