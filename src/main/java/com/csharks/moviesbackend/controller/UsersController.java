@@ -31,7 +31,7 @@ public class UsersController {
     @Autowired
     PlaylistsService playlistsService;
 
-// -------------------- Authentication / Authorisation / Register --------------------
+// -------------------- Register Methods [PUBLIC] --------------------
 /*
 REGISTRATION (POST):
 http://localhost:8000/movie-app/users/register
@@ -60,8 +60,47 @@ http://localhost:8000/movie-app/users/register
         return usersRepository.existsByEmailAddress(emailDTO.getEmailAddress());
     }
 
+    // -------------------- User Methods [USER] --------------------
 
-// -------------------- Authentication / Authorisation / Register --------------------
+    //  http://localhost:8000/movie-app/users/authenticated
+    @GetMapping("/authenticated")
+    public Users getAuthenticatedUser(Authentication auth){
+        var username= auth.getName();
+        log.info("username: {}", username);
+        return usersService.getUserByUsername(username);
+    }
+
+    /*
+        http://localhost:8000/movie-app/users/authenticated/set?picture=foto1
+        http://localhost:8000/movie-app/users/authenticated/set?bio=M
+        http://localhost:8000/movie-app/users/authenticated/set?username=new_name
+        http://localhost:8000/movie-app/users/authenticated/set?password=new_pass
+    */
+    @PutMapping("/authenticated/set")
+    public Users setAuthenticatedUser(Authentication auth,
+                         @RequestParam Optional<String> picture, @RequestParam Optional<String> bio,
+                         @RequestParam Optional<String> password){
+        var username= auth.getName();
+        return usersService.setUser(username, picture, bio, password);
+    }
+
+    /*  http://localhost:8000/movie-app/users/authenticated/createPlaylist
+      {
+        "name": "Playlist#1",
+        "visible": true
+      }
+    */
+    @PostMapping("/authenticated/createPlaylist")
+    public Playlists createPlaylistForAuthenticatedUser(Authentication auth, @RequestBody PlaylistsDTO playlistsDTO){
+        var username= auth.getName();
+        Optional<Users> user = usersRepository.findByUsername(username);
+        return playlistsService.createPlaylist(user.get(), playlistsDTO);
+    }
+
+
+
+// -------------------- Special Methods [ADMIN] --------------------
+
 //  http://localhost:8000/movie-app/users/all
     @GetMapping("/all")
     public List<Users> getAllUsers(){
@@ -74,14 +113,6 @@ http://localhost:8000/movie-app/users/register
         return usersRepository.findById(id);
     }
 
-    //  http://localhost:8000/movie-app/users/username/current
-    @GetMapping("/username/current")
-    public Users getUserByUsername(Authentication auth){
-        var username= auth.getName();
-        log.info("username: {}", username);
-        return usersService.getUserByUsername(username);
-    }
-
 
 /*
 http://localhost:8000/movie-app/users/4/set?picture=foto1
@@ -89,11 +120,12 @@ http://localhost:8000/movie-app/users/4/set?bio=M
 http://localhost:8000/movie-app/users/4/set?username=new_name
 http://localhost:8000/movie-app/users/4/set?password=new_pass
  */
-    @PutMapping("/{id}/set")
-    public Users setUser(@PathVariable Long id,
+// TODO - JA: Maybe remove this method
+    @PutMapping("/{username}/set")
+    public Users setUser(@PathVariable String username,
                          @RequestParam Optional<String> picture, @RequestParam Optional<String> bio,
                          @RequestParam Optional<String> password){
-        return usersService.setUser(id, picture, bio, password);
+        return usersService.setUser(username, picture, bio, password);
     }
 
 /*  http://localhost:8000/movie-app/users/1/createPlaylist
@@ -101,6 +133,7 @@ http://localhost:8000/movie-app/users/4/set?password=new_pass
     "name": "Playlist#1",
     "visible": true
   }
+// TODO - JA: Maybe remove this method
 */  @PostMapping("/{id}/createPlaylist")
     public Playlists createPlaylist(@PathVariable Long id, @RequestBody PlaylistsDTO playlistsDTO){
         Optional<Users> user = usersRepository.findById(id);
