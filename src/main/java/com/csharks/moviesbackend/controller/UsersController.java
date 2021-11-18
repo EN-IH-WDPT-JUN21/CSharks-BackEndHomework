@@ -92,6 +92,7 @@ http://localhost:8000/movie-app/users/register
     */
     @PostMapping("/authenticated/createPlaylist")
     public Playlists createPlaylistForAuthenticatedUser(Authentication auth, @RequestBody PlaylistsDTO playlistsDTO){
+        log.info("New playlist being created");
         var username= auth.getName();
         Optional<Users> user = usersRepository.findByUsername(username);
         return playlistsService.createPlaylist(user.get(), playlistsDTO);

@@ -46,7 +46,7 @@ public class Playlists {
         //this.movies.forEach(x -> x.getPlaylists().add(this));
     }
 
-    public int getIndexMovie(long titleId){
+    public int getIndexMovie(String titleId){
         int result = -1;
         for (int i = 0; i < this.getMovies().size(); i++){
             if(this.getMovies().get(i).getTitleId().equals(titleId)){

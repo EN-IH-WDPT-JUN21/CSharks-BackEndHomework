@@ -54,18 +54,9 @@ public class Data {
         usersRepository.save(new Users("Admin", "admin@gmail.com", bCryptPasswordEncoder.encode("admin"), "", ""));
         usersService.addRoleToUser("Admin", "ADMIN");
 
-        playlistsRepository.save(new Playlists(usersRepository.getById(1L), "Funny", true, new Movies(101L), new Movies(105L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "Saturday evenings", false, new Movies(101L), new Movies(103L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(3L), "When it's raining", true, new Movies(104L), new Movies(105L)));
-        playlistsRepository.save(new Playlists(usersRepository.getById(3L), "When it's raining", true, new Movies(104L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(1L), "Funny", true, new Movies("tt1375666")));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "Saturday evenings", false, new Movies("tt1375666")));
+        playlistsRepository.save(new Playlists(usersRepository.getById(3L), "When it's raining", true, new Movies("tt1375666")));
 
     }
 }

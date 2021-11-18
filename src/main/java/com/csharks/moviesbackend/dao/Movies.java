@@ -21,14 +21,14 @@ public class Movies {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movieId;
 
-    private Long titleId;
+    private String titleId;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
                 mappedBy = "movies")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Playlists> playlists;
 
-    public Movies(Long titleId) {
+    public Movies(String titleId) {
         this.titleId = titleId;
     }
 }

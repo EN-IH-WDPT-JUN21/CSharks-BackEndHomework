@@ -29,7 +29,7 @@ public class PlaylistsService {
     }
 
 
-    public Playlists addMovieToPlaylist(Long playlistId, Long titleId) {
+    public Playlists addMovieToPlaylist(Long playlistId, String titleId) {
         Optional<Playlists> playlist = playlistsRepository.findById(playlistId);
         Movies newTitle = new Movies(titleId);
         playlist.get().getMovies().add(newTitle);
@@ -37,7 +37,7 @@ public class PlaylistsService {
         return playlist.get();
     }
 
-    public Playlists removeMovieFromPlaylist(Long playlistId, Long titleId) {
+    public Playlists removeMovieFromPlaylist(Long playlistId, String titleId) {
         Optional<Playlists> playlist = playlistsRepository.findById(playlistId);
         int id = playlist.get().getIndexMovie(titleId);
         long movieId = playlist.get().getMovies().get(id).getMovieId();

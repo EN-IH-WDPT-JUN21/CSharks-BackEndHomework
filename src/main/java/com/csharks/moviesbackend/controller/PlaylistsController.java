@@ -1,5 +1,6 @@
 package com.csharks.moviesbackend.controller;
 
+import com.csharks.moviesbackend.dao.Movies;
 import com.csharks.moviesbackend.dao.Playlists;
 import com.csharks.moviesbackend.dao.Users;
 import com.csharks.moviesbackend.repository.MoviesRepository;
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,6 +62,18 @@ public class PlaylistsController {
         return playlistsRepository.findByUserId(userId);
     }
 
+    //  http://localhost:8000/movie-app/playlists/2/movies
+    @GetMapping("/{playlistId}/movies")
+    public List<String> getAllMoviesIdByPlaylistId(@PathVariable Long playlistId){
+        Optional<Playlists> playlist = playlistsRepository.findByPlaylistId(playlistId);
+        List<Movies> movieList = playlist.get().getMovies();
+        List<String> moviesIdList = new ArrayList<String>();
+        for(int i = 0; i < movieList.size(); i++){
+            moviesIdList.add(movieList.get(i).getTitleId().toString());
+        }
+        return moviesIdList;
+    }
+
     //  http://localhost:8000/movie-app/playlists/1/delete
     @DeleteMapping("/{playlistId}/delete")
     public void deletePlaylist(@PathVariable Long playlistId) {
@@ -68,14 +82,13 @@ public class PlaylistsController {
 
     //  http://localhost:8000/movie-app/playlists/2/add/999
     @PutMapping("/{playlistId}/add/{titleId}")
-    public Playlists addMovie(@PathVariable Long playlistId, @PathVariable Long titleId) {
+    public Playlists addMovie(@PathVariable Long playlistId, @PathVariable String titleId) {
         return playlistsService.addMovieToPlaylist(playlistId, titleId);
     }
 
     //  http://localhost:8000/movie-app/playlists/2/remove/103
     @PutMapping("/{playlistId}/remove/{titleId}")
-    public Playlists removeMovie(@PathVariable Long playlistId, @PathVariable Long titleId) {
+    public Playlists removeMovie(@PathVariable Long playlistId, @PathVariable String titleId) {
         return playlistsService.removeMovieFromPlaylist(playlistId, titleId);
     }
-
 }
