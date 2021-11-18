@@ -3,6 +3,7 @@ package com.csharks.moviesbackend.security;
 import com.csharks.moviesbackend.security.Service.CustomUserDetailService;
 import com.csharks.moviesbackend.security.filter.CustomAuthenticationFilter;
 import com.csharks.moviesbackend.security.filter.CustomAuthorizationFilter;
+import com.csharks.moviesbackend.security.filter.CustomUserAccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,9 +28,10 @@ import static org.springframework.http.HttpMethod.*;
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailService customUserDetailService;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private CustomUserAccess customUserAccess;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,6 +42,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public CustomUserAccess customUserFilter() {
+        return new CustomUserAccess();
     }
 
     @Bean
@@ -61,7 +68,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth
                 .userDetailsService(customUserDetailService)
                 .passwordEncoder(passwordEncoder);
-
     }
 
     @Override
@@ -70,6 +76,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
+
+                // Public Access
                 .mvcMatchers(
                         "/login",
                         "/movie-app/users/register",
@@ -77,6 +85,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/movie-app/users/validate/email"
                 ).permitAll()
 
+                // Logged User Access
                 .mvcMatchers(GET, "/movie-app/users/authenticated").hasAnyRole("ADMIN", "USER")
                 .mvcMatchers(PUT, "/movie-app/users/authenticated/set").hasAnyRole("ADMIN", "USER")
                 .mvcMatchers(POST, "/movie-app/users/authenticated/createPlaylist").hasAnyRole("ADMIN", "USER")
@@ -84,7 +93,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 // TODO JA - Define security for specific user playlist
                 .mvcMatchers("/movie-app/playlists/**").hasAnyRole("ADMIN", "USER")
+//                .mvcMatchers(GET,"/movie-app/playlists/{playlistId}/**")
+//                .access("@customUserFilter.checkUsernameFromPlaylistId(authentication,#playlistId)")
 
+                // Admin Exclusive Access
                 .mvcMatchers("/movie-app/playlists/**").hasRole("ADMIN")
                 .mvcMatchers("/movie-app/users/**").hasRole("ADMIN")
 

@@ -53,7 +53,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
                     log.error("Error while trying to authenticate user. In: {}", e.getMessage());
-                    response.setHeader("error",e.getMessage());
+                    response.setHeader("error", e.getMessage());
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 //                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     var errorBody = new HashMap<String, String>();
