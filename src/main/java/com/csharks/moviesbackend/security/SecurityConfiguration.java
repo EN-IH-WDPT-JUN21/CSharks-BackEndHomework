@@ -1,9 +1,9 @@
 package com.csharks.moviesbackend.security;
 
 import com.csharks.moviesbackend.security.Service.CustomUserDetailService;
-import com.csharks.moviesbackend.security.Service.UserAccessService;
 import com.csharks.moviesbackend.security.filter.CustomAuthenticationFilter;
 import com.csharks.moviesbackend.security.filter.CustomAuthorizationFilter;
+import com.csharks.moviesbackend.security.filter.CustomUserAccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,12 +28,10 @@ import static org.springframework.http.HttpMethod.*;
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailService customUserDetailService;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
-    private UserAccessService userSecurityService;
+    private CustomUserAccess customUserAccess;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -41,14 +39,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public UserAccessService userFilter() {
-        return new UserAccessService();
-    }
-
-    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public CustomUserAccess customUserFilter() {
+        return new CustomUserAccess();
     }
 
     @Bean
@@ -70,7 +68,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth
                 .userDetailsService(customUserDetailService)
                 .passwordEncoder(passwordEncoder);
-
     }
 
     @Override
@@ -79,35 +76,32 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
-                .mvcMatchers("/login", "/register", "/movie-app/users/validate/**").permitAll()
-                .mvcMatchers(GET, "/movie-app/users/all").hasRole("ADMIN")
 
-                // Get user details
-                .mvcMatchers(GET, "/movie-app/users/username/current").hasAnyRole("ADMIN", "USER")
+                // Public Access
+                .mvcMatchers(
+                        "/login",
+                        "/movie-app/users/register",
+                        "/movie-app/users/validate/username",
+                        "/movie-app/users/validate/email"
+                ).permitAll()
 
-                // Get user details
-                .mvcMatchers(GET, "/movie-app/users/{id}")
-                .access("@userFilter.checkUsernameFromUserId(authentication,#id)")
+                // Logged User Access
+                .mvcMatchers(GET, "/movie-app/users/authenticated").hasAnyRole("ADMIN", "USER")
+                .mvcMatchers(PUT, "/movie-app/users/authenticated/set").hasAnyRole("ADMIN", "USER")
+                .mvcMatchers(POST, "/movie-app/users/authenticated/createPlaylist").hasAnyRole("ADMIN", "USER")
+                .mvcMatchers(GET, "/movie-app/playlists/user/authenticated").hasAnyRole("ADMIN", "USER")
 
-                // Set user details
-                .mvcMatchers(PUT, "/movie-app/users/{id}/set")
-                .access("@userFilter.checkUsernameFromUserId(authentication,#id)")
-                // Get playlist from user
-                .mvcMatchers(GET, "/movie-app/playlists/user/{id}")
-                .access("@userFilter.checkUsernameFromUserId(authentication,#id)")
-                // Create playlist in user
-                .mvcMatchers(PUT, "/movie-app/users/{id}/createPlaylist")
-                .access("@userFilter.checkUsernameFromUserId(authentication,#id)")
-                // Delete playlist in user
-                .mvcMatchers(DELETE, "/movie-app/playlists/{playlistId}/delete")
-                .access("@userFilter.checkUsernameFromPlaylistId(authentication,#playlistId)")
-                // Add movie to playlist in user
-                .mvcMatchers(PUT, "/movie-app/playlists/{playlistId}/add/**")
-                .access("@userFilter.checkUsernameFromPlaylistId(authentication,#playlistId)")
-                // Remover movie from playlist in user
-                .mvcMatchers(PUT, "/movie-app/playlists/{playlistId}/remove/**")
-                .access("@userFilter.checkUsernameFromPlaylistId(authentication,#playlistId)")
-                .anyRequest().permitAll();
+                // TODO JA - Define security for specific user playlist
+                .mvcMatchers("/movie-app/playlists/**").hasAnyRole("ADMIN", "USER")
+//                .mvcMatchers(GET,"/movie-app/playlists/{playlistId}/**")
+//                .access("@customUserFilter.checkUsernameFromPlaylistId(authentication,#playlistId)")
+
+                // Admin Exclusive Access
+                .mvcMatchers("/movie-app/playlists/**").hasRole("ADMIN")
+                .mvcMatchers("/movie-app/users/**").hasRole("ADMIN")
+
+                .anyRequest().authenticated();
+
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

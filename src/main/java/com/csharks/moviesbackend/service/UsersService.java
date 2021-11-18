@@ -57,8 +57,8 @@ public class UsersService {
     }
 
     // -------------------- User update methods -------------------- // notes: removed username from update method
-    public Users setUser(Long id, Optional<String> picture, Optional<String> bio, Optional<String> password) {
-        Optional<Users> updateUser = usersRepository.findById(id);
+    public Users setUser(String username, Optional<String> picture, Optional<String> bio, Optional<String> password) {
+        Optional<Users> updateUser = usersRepository.findByUsername(username);
         if (picture.isPresent()) {
             updateUser.get().setPictureUrl(picture.get());
             usersRepository.save(updateUser.get());

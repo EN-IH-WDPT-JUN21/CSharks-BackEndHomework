@@ -1,39 +1,21 @@
-package com.csharks.moviesbackend.security.Service;
+package com.csharks.moviesbackend.security.filter;
 
 import com.csharks.moviesbackend.repository.PlaylistsRepository;
-import com.csharks.moviesbackend.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
+
+// TODO: fix bug when using this with jwt security
 @Slf4j
-public class UserAccessService {
-
-    @Autowired
-    private UsersRepository usersRepository;
-
+public class CustomUserAccess {
     @Autowired
     private PlaylistsRepository playlistsRepository;
 
 
-    // Checks if user id corresponds to the user that is logged in. Or if is Admin.
-    public boolean checkUsernameFromUserId(Authentication authentication, Long userId) {
-        if (checkAdminRole(authentication)) return true;
-        var loggedInUsername = authentication.getName();
-        var storedUser = usersRepository.findById(userId);
-        return storedUser
-                .map(user -> {
-                    log.info("Checking if user {} is the same as logged in user {}", user.getUsername(), loggedInUsername);
-                    return user.getUsername().equals(loggedInUsername);
-                })
-                .orElseGet(() -> {
-                    log.info("User with id {} not found", userId);
-                    return false;
-                });
-    }
-
-    // Checks if playlist id belongs to the user that is logged in. Or if is Admin.
+    // Checks if playlist id belongs to the logged user. Or if is Admin.
     public boolean checkUsernameFromPlaylistId(Authentication authentication, Long playlistId) {
+        log.info("Checking if user {} has access to playlist {}", authentication.getName(), playlistId);
         if (checkAdminRole(authentication)) return true;
         var loggedInUsername = authentication.getName();
         var storedPlaylist = playlistsRepository.findByPlaylistId(playlistId);
@@ -48,7 +30,7 @@ public class UserAccessService {
                 });
     }
 
-    // Checks if user is admin
+    // Checks if logged user is admin
     private boolean checkAdminRole(Authentication authentication) {
         log.info("Checking if user {} has admin role", authentication.getName());
         return authentication.getAuthorities()

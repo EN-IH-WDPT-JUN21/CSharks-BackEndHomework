@@ -8,7 +8,6 @@ import com.csharks.moviesbackend.repository.PlaylistsRepository;
 import com.csharks.moviesbackend.repository.UsersRepository;
 import com.csharks.moviesbackend.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -58,6 +57,15 @@ public class Data {
         playlistsRepository.save(new Playlists(usersRepository.getById(1L), "Funny", true, new Movies(101L), new Movies(105L)));
         playlistsRepository.save(new Playlists(usersRepository.getById(2L), "Saturday evenings", false, new Movies(101L), new Movies(103L)));
         playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "When it's raining", true, new Movies(104L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(3L), "When it's raining", true, new Movies(104L), new Movies(105L)));
+        playlistsRepository.save(new Playlists(usersRepository.getById(3L), "When it's raining", true, new Movies(104L), new Movies(105L)));
 
     }
 }
