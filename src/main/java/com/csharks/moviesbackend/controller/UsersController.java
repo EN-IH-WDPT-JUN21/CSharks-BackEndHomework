@@ -76,7 +76,7 @@ http://localhost:8000/movie-app/users/register
         http://localhost:8000/movie-app/users/authenticated/set?username=new_name
         http://localhost:8000/movie-app/users/authenticated/set?password=new_pass
     */
-    @PutMapping("/authenticated/set")
+    @PatchMapping("/authenticated/set")
     public Users setAuthenticatedUser(Authentication auth,
                          @RequestParam Optional<String> picture, @RequestParam Optional<String> bio,
                          @RequestParam Optional<String> password){
@@ -121,7 +121,7 @@ http://localhost:8000/movie-app/users/4/set?username=new_name
 http://localhost:8000/movie-app/users/4/set?password=new_pass
  */
 // TODO - JA: Maybe remove this method
-    @PutMapping("/{username}/set")
+    @PatchMapping("/{username}/set")
     public Users setUser(@PathVariable String username,
                          @RequestParam Optional<String> picture, @RequestParam Optional<String> bio,
                          @RequestParam Optional<String> password){
