@@ -44,7 +44,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256("secretPass".getBytes());
-        Date expireDate = new Date(System.currentTimeMillis() + 30 * 60 * 1000); // 30min
+        Date expireDate = new Date(System.currentTimeMillis() + 60 * 60 * 1000); // 60min
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(expireDate)

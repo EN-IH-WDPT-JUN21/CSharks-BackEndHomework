@@ -13,7 +13,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Role {
+public class Roles {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,7 +23,9 @@ public class Role {
     @Column(name = "name", unique = true)
     private String name;
 
-    public Role(String name) {
+
+    // -------------------- Constructors --------------------
+    public Roles(String name) {
         this.name = name;
     }
 

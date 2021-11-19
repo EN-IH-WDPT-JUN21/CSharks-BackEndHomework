@@ -29,13 +29,6 @@ public class Data {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-    //    public void deleteRep(){
-//        moviesRepository
-//        moviesRepository.deleteAll();
-//        playlistsRepository.deleteAll();
-//        usersRepository.deleteAll();
-//    }
-
     public void populate() {
 
 //        moviesRepository.save(new Movies(101l));
@@ -54,9 +47,16 @@ public class Data {
         usersRepository.save(new Users("Admin", "admin@gmail.com", bCryptPasswordEncoder.encode("admin"), "", ""));
         usersService.addRoleToUser("Admin", "ADMIN");
 
-        playlistsRepository.save(new Playlists(usersRepository.getById(1L), "Funny", true, new Movies("tt1375666")));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L), "Saturday evenings", false, new Movies("tt1375666")));
-        playlistsRepository.save(new Playlists(usersRepository.getById(3L), "When it's raining", true, new Movies("tt1375666")));
+        playlistsRepository.save(new Playlists(usersRepository.getById(1L),
+                "Funny", true, new Movies("tt1375666"), new Movies("tt0411008")));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L),
+                "Saturday evenings", true, new Movies("tt1375666"), new Movies("tt0110413"), new Movies("tt1375666")));
+        playlistsRepository.save(new Playlists(usersRepository.getById(2L),
+                "To watch", false, new Movies("tt1375666"), new Movies("tt1375666")));
+        playlistsRepository.save(new Playlists(usersRepository.getById(3L),
+                "When it's raining", true, new Movies("tt1375666")));
+        playlistsRepository.save(new Playlists(usersRepository.getById(3L),
+                "Favorite", false, new Movies("tt1375666")));
 
     }
 }
