@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,6 +44,14 @@ public class Playlists {
         this.name = name;
         this.visible = visible;
         this.movies = Stream.of(movies).collect(Collectors.toList());
+    }
+
+    public Playlists(Users user, String name, boolean visible, Movies movies ) {
+        this.user = user;
+        this.name = name;
+        this.visible = visible;
+        this.movies = new ArrayList<>();
+        this.movies.add(movies);
     }
 
     public int getIndexMovie(String titleId){

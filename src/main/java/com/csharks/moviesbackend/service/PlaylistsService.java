@@ -3,6 +3,7 @@ package com.csharks.moviesbackend.service;
 import com.csharks.moviesbackend.dao.Movies;
 import com.csharks.moviesbackend.dao.Playlists;
 import com.csharks.moviesbackend.dao.Users;
+import com.csharks.moviesbackend.dto.PlaylistWithMovieDTO;
 import com.csharks.moviesbackend.dto.PlaylistsDTO;
 import com.csharks.moviesbackend.repository.MoviesRepository;
 import com.csharks.moviesbackend.repository.PlaylistsRepository;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -78,6 +80,7 @@ public class PlaylistsService {
         return playlistsRepository.findByVisibleAndNameContaining(true, searchQuery);
     }
 
+
     public boolean isValidUserByPlaylistId(Authentication auth, Long id) {
         log.info("Checking if user: {} is valid for playlist: {}", auth.getName(), id);
         Optional<Playlists> storedPlaylist = playlistsRepository.findById(id);
@@ -89,6 +92,18 @@ public class PlaylistsService {
                 .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
 
         return auth.getName().equals(username) || isAdmin;
+    }
+  
+  
+    public Playlists createPlaylistWithMovie(Users users, PlaylistWithMovieDTO playlistWithMovieDTO){
+        Movies newMovie = new Movies(playlistWithMovieDTO.getMovieId());
+        Playlists newPlaylist = new Playlists(users,
+                playlistWithMovieDTO.getName(),
+                playlistWithMovieDTO.isVisible(),
+                newMovie
+                );
+        playlistsRepository.save(newPlaylist);
+        return newPlaylist;
     }
 
 }
