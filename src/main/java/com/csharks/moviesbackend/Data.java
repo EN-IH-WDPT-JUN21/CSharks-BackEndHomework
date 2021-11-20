@@ -36,27 +36,32 @@ public class Data {
 //        moviesRepository.save(new Movies(103l));
 //        moviesRepository.save(new Movies(104l));
 //        moviesRepository.save(new Movies(105l));
-
-        usersRepository.save(new Users("User#1", "user1@gmail.com", bCryptPasswordEncoder.encode("user1"), "pictureURL", "M"));
-        usersService.addRoleToUser("User#1", "USER");
-        usersRepository.save(new Users("User#2", "user2@gmail.com", bCryptPasswordEncoder.encode("user2"), "pictureURL", "F"));
-        usersService.addRoleToUser("User#2", "USER");
-        usersRepository.save(new Users("User#3", "user3@gmail.com", bCryptPasswordEncoder.encode("user3"), "pictureURL", "M"));
-        usersService.addRoleToUser("User#3", "USER");
-
-        usersRepository.save(new Users("Admin", "admin@gmail.com", bCryptPasswordEncoder.encode("admin"), "", ""));
-        usersService.addRoleToUser("Admin", "ADMIN");
-
-        playlistsRepository.save(new Playlists(usersRepository.getById(1L),
-                "Funny", true, new Movies("tt1375666"), new Movies("tt0411008")));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L),
-                "Saturday evenings", true, new Movies("tt1375666"), new Movies("tt0110413"), new Movies("tt1375666")));
-        playlistsRepository.save(new Playlists(usersRepository.getById(2L),
-                "To watch", false, new Movies("tt1375666"), new Movies("tt1375666")));
-        playlistsRepository.save(new Playlists(usersRepository.getById(3L),
-                "When it's raining", true, new Movies("tt1375666")));
-        playlistsRepository.save(new Playlists(usersRepository.getById(3L),
-                "Favorite", false, new Movies("tt1375666")));
-
+//
+//        usersRepository.save(new Users("ad", "user1@gmail.com", bCryptPasswordEncoder.encode("user1"), "pictureURL", "M"));
+//        usersService.addRoleToUser("ad", "USER");
+//        usersRepository.save(new Users("us", "user1@gmail.com", bCryptPasswordEncoder.encode("user"), "pictureURL", "M"));
+//        usersService.addRoleToUser("us", "USER");
+//
+//        usersRepository.save(new Users("User#1", "user1@gmail.com", bCryptPasswordEncoder.encode("user1"), "pictureURL", "M"));
+//        usersService.addRoleToUser("User#1", "USER");
+//        usersRepository.save(new Users("User#2", "user2@gmail.com", bCryptPasswordEncoder.encode("user2"), "pictureURL", "F"));
+//        usersService.addRoleToUser("User#2", "USER");
+//        usersRepository.save(new Users("User#3", "user3@gmail.com", bCryptPasswordEncoder.encode("user3"), "pictureURL", "M"));
+//        usersService.addRoleToUser("User#3", "USER");
+//
+//        usersRepository.save(new Users("Admin", "admin@gmail.com", bCryptPasswordEncoder.encode("admin"), "", ""));
+//        usersService.addRoleToUser("Admin", "ADMIN");
+//
+//        playlistsRepository.save(new Playlists(usersRepository.getById(1L),
+//                "Funny", true, new Movies("tt1375666"), new Movies("tt0411008")));
+//        playlistsRepository.save(new Playlists(usersRepository.getById(2L),
+//                "Saturday evenings", true, new Movies("tt1375666"), new Movies("tt0110413"), new Movies("tt1375666")));
+//        playlistsRepository.save(new Playlists(usersRepository.getById(2L),
+//                "To watch", false, new Movies("tt1375666"), new Movies("tt1375666")));
+//        playlistsRepository.save(new Playlists(usersRepository.getById(3L),
+//                "When it's raining", true, new Movies("tt1375666")));
+//        playlistsRepository.save(new Playlists(usersRepository.getById(3L),
+//                "Favorite", false, new Movies("tt1375666")));
+//
     }
 }
