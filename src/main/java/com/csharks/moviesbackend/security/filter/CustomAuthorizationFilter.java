@@ -16,10 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -32,17 +29,17 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         if (request.getServletPath().equals("/login")) {
             filterChain.doFilter(request, response);
         } else {
-            var authorisationHeader = request.getHeader(AUTHORIZATION);
+            String authorisationHeader = request.getHeader(AUTHORIZATION);
             if (authorisationHeader != null && authorisationHeader.startsWith("Bearer ")) {
                 try {
-                    var token = authorisationHeader.substring("Bearer ".length());
+                    String token = authorisationHeader.substring("Bearer ".length());
                     Algorithm algorithm = Algorithm.HMAC256("secretPass".getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     // get username
-                    var username = decodedJWT.getSubject();
+                    String username = decodedJWT.getSubject();
                     // get collection of roles (authorities)
-                    var roles = decodedJWT.getClaim("roles").asArray(String.class);
+                    String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     Arrays.stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
                     // set authentication context
@@ -56,7 +53,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     response.setHeader("error", e.getMessage());
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 //                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
-                    var errorBody = new HashMap<String, String>();
+                    Map<String, String> errorBody = new HashMap<>();
                     errorBody.put("error_message", e.getMessage());
                     response.setContentType(APPLICATION_JSON_VALUE);
                     new ObjectMapper().writeValue(response.getOutputStream(), errorBody);

@@ -3,7 +3,6 @@ package com.csharks.moviesbackend.security;
 import com.csharks.moviesbackend.security.Service.CustomUserDetailService;
 import com.csharks.moviesbackend.security.filter.CustomAuthenticationFilter;
 import com.csharks.moviesbackend.security.filter.CustomAuthorizationFilter;
-import com.csharks.moviesbackend.security.filter.CustomUserAccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,8 +29,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailService customUserDetailService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private CustomUserAccess customUserAccess;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,11 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }
-
-    @Bean
-    public CustomUserAccess customUserFilter() {
-        return new CustomUserAccess();
     }
 
     @Bean
@@ -85,21 +77,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/movie-app/users/validate/email"
                 ).permitAll()
 
+                // Admin Exclusive Access
+                .mvcMatchers("/movie-app/playlists/admin/**").hasRole("ADMIN")
+                .mvcMatchers("/movie-app/users/admin/**").hasRole("ADMIN")
+
                 // Logged User Access
                 .mvcMatchers(GET, "/movie-app/users/authenticated").hasAnyRole("ADMIN", "USER")
                 .mvcMatchers(PATCH, "/movie-app/users/authenticated/set").hasAnyRole("ADMIN", "USER")
                 .mvcMatchers(POST, "/movie-app/users/authenticated/createPlaylist").hasAnyRole("ADMIN", "USER")
                 .mvcMatchers(POST, "/movie-app/users/authenticated/createPlaylistWithMovie").hasAnyRole("ADMIN", "USER")
                 .mvcMatchers(GET, "/movie-app/playlists/user/authenticated").hasAnyRole("ADMIN", "USER")
+                .mvcMatchers(GET, "/movie-app/playlists/visible").hasAnyRole("ADMIN", "USER") // manually secured on  controller
+                .mvcMatchers("/movie-app/playlists/{playlistId}/**").hasAnyRole("ADMIN", "USER") // manually secured on  controller
 
-                // TODO JA - Define security for specific user playlist
-                .mvcMatchers("/movie-app/playlists/**").hasAnyRole("ADMIN", "USER")
-//                .mvcMatchers(GET,"/movie-app/playlists/{playlistId}/**")
-//                .access("@customUserFilter.checkUsernameFromPlaylistId(authentication,#playlistId)")
-
-                // Admin Exclusive Access
-                .mvcMatchers("/movie-app/playlists/**").hasRole("ADMIN")
-                .mvcMatchers("/movie-app/users/**").hasRole("ADMIN")
 
                 .anyRequest().authenticated();
 

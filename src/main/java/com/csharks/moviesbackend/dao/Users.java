@@ -26,20 +26,20 @@ public class Users {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles = new HashSet<>();
+    private Set<Roles> roles = new HashSet<>();
 
     private String username;
     private String emailAddress;
     private String password;
     private String pictureUrl;
     private String bio;
-//    private LocalDate dateOfBirth;
-//    private String gender;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Playlists> playlists = new ArrayList<>();
 
-    // constructor for registration
+
+    // -------------------- Constructors --------------------
+    // Constructor for registration
     public Users(RegisterUserDTO registerUserDTO) {
         this.username = registerUserDTO.getUsername();
         this.emailAddress = registerUserDTO.getEmailAddress();
@@ -57,4 +57,5 @@ public class Users {
         this.bio = bio;
         this.roles = new HashSet<>();
     }
+
 }

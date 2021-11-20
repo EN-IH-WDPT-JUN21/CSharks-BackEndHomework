@@ -1,6 +1,6 @@
 package com.csharks.moviesbackend.security;
 
-import com.csharks.moviesbackend.dao.Role;
+import com.csharks.moviesbackend.dao.Roles;
 import com.csharks.moviesbackend.dao.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,8 +17,8 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new HashSet<>();
-        for (Role role : users.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+        for (Roles roles : users.getRoles()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + roles.getName()));
         }
         return authorities;
     }

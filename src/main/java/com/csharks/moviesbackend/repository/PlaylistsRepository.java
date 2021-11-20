@@ -1,5 +1,6 @@
 package com.csharks.moviesbackend.repository;
 
+import com.csharks.moviesbackend.dao.Movies;
 import com.csharks.moviesbackend.dao.Playlists;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,8 @@ public interface PlaylistsRepository extends JpaRepository<Playlists, Long> {
 
     void deleteByPlaylistId(Long playlistsId);
 
+    List<Playlists> findByVisible(boolean visible);
 
+    List<Playlists> findByVisibleAndNameContaining(boolean visible, String name);
 
 }

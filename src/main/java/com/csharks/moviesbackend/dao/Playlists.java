@@ -5,12 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,18 +31,19 @@ public class Playlists {
     private String name;
     private boolean visible;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "playlists_titles",
-            joinColumns = { @JoinColumn(name = "playlist_id") },
-            inverseJoinColumns = { @JoinColumn(name = "title_id") })
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "title_id"))
     private List<Movies> movies;
 
-    public Playlists(Users user, String name, boolean visible, Movies... movies ) {
+
+    // -------------------- Constructors --------------------
+    public Playlists(Users user, String name, boolean visible, Movies... movies) {
         this.user = user;
         this.name = name;
         this.visible = visible;
         this.movies = Stream.of(movies).collect(Collectors.toList());
-        //this.movies.forEach(x -> x.getPlaylists().add(this));
     }
 
     public Playlists(Users user, String name, boolean visible, Movies movies ) {
