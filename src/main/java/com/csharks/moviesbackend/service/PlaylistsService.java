@@ -3,12 +3,15 @@ package com.csharks.moviesbackend.service;
 import com.csharks.moviesbackend.dao.Movies;
 import com.csharks.moviesbackend.dao.Playlists;
 import com.csharks.moviesbackend.dao.Users;
+import com.csharks.moviesbackend.dto.PlaylistWithMovieDTO;
 import com.csharks.moviesbackend.dto.PlaylistsDTO;
 import com.csharks.moviesbackend.repository.MoviesRepository;
 import com.csharks.moviesbackend.repository.PlaylistsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,5 +53,15 @@ public class PlaylistsService {
         return playlist.get();
     }
 
+    public Playlists createPlaylistWithMovie(Users users, PlaylistWithMovieDTO playlistWithMovieDTO){
+        Movies newMovie = new Movies(playlistWithMovieDTO.getMovieId());
+        Playlists newPlaylist = new Playlists(users,
+                playlistWithMovieDTO.getName(),
+                playlistWithMovieDTO.isVisible(),
+                newMovie
+                );
+        playlistsRepository.save(newPlaylist);
+        return newPlaylist;
+    }
 
 }

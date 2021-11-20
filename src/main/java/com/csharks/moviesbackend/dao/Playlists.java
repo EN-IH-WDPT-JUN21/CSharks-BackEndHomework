@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,6 +45,14 @@ public class Playlists {
         this.visible = visible;
         this.movies = Stream.of(movies).collect(Collectors.toList());
         //this.movies.forEach(x -> x.getPlaylists().add(this));
+    }
+
+    public Playlists(Users user, String name, boolean visible, Movies movies ) {
+        this.user = user;
+        this.name = name;
+        this.visible = visible;
+        this.movies = new ArrayList<>();
+        this.movies.add(movies);
     }
 
     public int getIndexMovie(String titleId){
