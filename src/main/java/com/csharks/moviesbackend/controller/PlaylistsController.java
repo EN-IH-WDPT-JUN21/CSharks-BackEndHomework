@@ -43,7 +43,7 @@ public class PlaylistsController {
     //  GET: http://localhost:8000/movie-app/playlists/user/authenticated
     @GetMapping("/user/authenticated")
     public Optional<List<Playlists>> getPlaylistByUserId(Authentication auth) {
-        var userId = usersRepository.findByUsername(auth.getName())
+        long userId = usersRepository.findByUsername(auth.getName())
                 .map(Users::getId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "User not found"));
         return playlistsRepository.findByUserId(userId);
@@ -52,7 +52,7 @@ public class PlaylistsController {
     //  GET: http://localhost:8000/movie-app/playlists/2
     @GetMapping("/{playlistId}")
     public Optional<Playlists> getPlaylistById(Authentication auth, @PathVariable Long playlistId) {
-        var storedPlaylist = playlistsRepository.findByPlaylistId(playlistId)
+        Playlists storedPlaylist = playlistsRepository.findByPlaylistId(playlistId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Playlist not found"));
 
         if (storedPlaylist.isVisible() || playlistsService.isValidUserByPlaylistId(auth, playlistId)) {
@@ -77,7 +77,7 @@ public class PlaylistsController {
     //  GET: http://localhost:8000/movie-app/playlists/2/movies
     @GetMapping("/{playlistId}/movies")
     public List<String> getAllMoviesIdByPlaylistId(Authentication auth, @PathVariable Long playlistId) {
-        var storedPlaylist = playlistsRepository.findByPlaylistId(playlistId)
+        Playlists storedPlaylist = playlistsRepository.findByPlaylistId(playlistId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Playlist not found"));
 
         if (storedPlaylist.isVisible() || playlistsService.isValidUserByPlaylistId(auth, playlistId)) {

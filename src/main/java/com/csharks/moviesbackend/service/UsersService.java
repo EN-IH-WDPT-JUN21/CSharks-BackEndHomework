@@ -28,18 +28,17 @@ public class UsersService {
     public Users registerUser(RegisterUserDTO registerUserDTO) {
         registerUserDTO.setPassword(passwordEncoder.encode(registerUserDTO.getPassword()));
         log.info("Registering user: {}", registerUserDTO);
-        var newUser = usersRepository.save(new Users(registerUserDTO));
+        Users newUser = usersRepository.save(new Users(registerUserDTO));
         addRoleToUser(newUser.getUsername(), "USER");
         return newUser;
     }
 
     public void addRoleToUser(String username, String roleName) {
         log.info("Adding role: {} to user: {}", roleName, username);
-        var user = getUserByUsername(username);
-        var storedRole = roleRepository.findByName(roleName);
+        Users user = getUserByUsername(username);
+        Optional<Roles> storedRole = roleRepository.findByName(roleName);
         user.getRoles().add(
-                storedRole
-                        .orElseGet(() -> roleRepository.save(new Roles(roleName)))
+                storedRole.orElseGet(() -> roleRepository.save(new Roles(roleName)))
         );
         usersRepository.save(user);
     }
@@ -47,17 +46,20 @@ public class UsersService {
 
     // -------------------- User detail methods --------------------
     public Users getUserById(Long id) {
-        var storedUser = usersRepository.findById(id);
+        log.info("Getting user: {}", id);
+        Optional<Users> storedUser = usersRepository.findById(id);
         return storedUser.orElseThrow(() -> new RuntimeException("User not found."));
     }
 
     public Users getUserByUsername(String username) {
-        var storedUser = usersRepository.findByUsername(username);
+        log.info("Getting user: {}", username);
+        Optional<Users> storedUser = usersRepository.findByUsername(username);
         return storedUser.orElseThrow(() -> new RuntimeException("User not found."));
     }
 
     // -------------------- User update methods --------------------
     public Users setUserByUsername(String username, Optional<String> picture, Optional<String> bio, Optional<String> password) {
+        log.info("Updating user: {}", username);
         Optional<Users> updateUser = usersRepository.findByUsername(username);
         return updateUser   // if the user exists
                 .map(users -> updateUserDetails(picture, bio, password, users)) // update the user
@@ -65,6 +67,7 @@ public class UsersService {
     }
 
     public Users setUserById(Long id, Optional<String> picture, Optional<String> bio, Optional<String> password) {
+        log.info("Updating user: {}", id);
         Optional<Users> updateUser = usersRepository.findById(id);
         return updateUser   // if the user exists
                 .map(users -> updateUserDetails(picture, bio, password, users)) // update the user

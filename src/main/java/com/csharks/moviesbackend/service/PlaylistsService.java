@@ -6,7 +6,8 @@ import com.csharks.moviesbackend.dao.Users;
 import com.csharks.moviesbackend.dto.PlaylistsDTO;
 import com.csharks.moviesbackend.repository.MoviesRepository;
 import com.csharks.moviesbackend.repository.PlaylistsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -15,24 +16,26 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
+// this and the private final objects create a constructor that does the same as the @Autowired (but only sometimes)
 public class PlaylistsService {
-
-    @Autowired
-    PlaylistsRepository playlistsRepository;
-    @Autowired
-    MoviesRepository moviesRepository;
+    private final PlaylistsRepository playlistsRepository;
+    private final MoviesRepository moviesRepository;
 
     public Playlists createPlaylist(Users users, PlaylistsDTO playlistsDTO) {
+        log.info("Creating playlist for user: {}", users.getUsername());
         Playlists newPlaylist = new Playlists(
                 users,
                 playlistsDTO.getName(),
                 playlistsDTO.isVisible()
         );
-        playlistsRepository.save(newPlaylist);
-        return newPlaylist;
+        log.info("Playlist details: {}", newPlaylist);
+        return playlistsRepository.save(newPlaylist);
     }
 
     public Playlists addMovieToPlaylist(Long playlistId, String titleId) {
+        log.info("Adding movie with title: {} to playlist: {}", titleId, playlistId);
         Playlists playlist = playlistsRepository.findById(playlistId)
                 .orElseThrow(() -> new RuntimeException("Playlist not found"));
         Movies newTitle = new Movies(titleId);
@@ -41,6 +44,7 @@ public class PlaylistsService {
     }
 
     public Playlists removeMovieFromPlaylist(Long playlistId, String titleId) {
+        log.info("Removing movie with title: {} from playlist: {}", titleId, playlistId);
         Playlists playlist = playlistsRepository.findById(playlistId)
                 .orElseThrow(() -> new RuntimeException("Playlist not found"));
 
@@ -57,6 +61,7 @@ public class PlaylistsService {
     }
 
     public List<String> getMoviesFromPlaylist(Playlists playlist) {
+        log.info("Getting movies from playlist: {}", playlist.getPlaylistId());
         List<Movies> movieList = playlist.getMovies();
         return movieList.stream()
                 .map(Movies::getTitleId)
@@ -64,16 +69,19 @@ public class PlaylistsService {
     }
 
     public List<Playlists> getVisiblePlaylists() {
+        log.info("Getting all visible playlists");
         return playlistsRepository.findByVisible(true);
     }
 
     public List<Playlists> searchVisiblePlaylists(String searchQuery) {
+        log.info("Searching for visible playlists with query: {}", searchQuery);
         return playlistsRepository.findByVisibleAndNameContaining(true, searchQuery);
     }
 
     public boolean isValidUserByPlaylistId(Authentication auth, Long id) {
-        var storedPlaylist = playlistsRepository.findById(id);
-        var username = storedPlaylist
+        log.info("Checking if user: {} is valid for playlist: {}", auth.getName(), id);
+        Optional<Playlists> storedPlaylist = playlistsRepository.findById(id);
+        String username = storedPlaylist
                 .map(playlist -> playlist.getUser().getUsername())
                 .orElseThrow(() -> new RuntimeException("Playlist not found"));
 

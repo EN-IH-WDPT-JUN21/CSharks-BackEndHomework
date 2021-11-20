@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -31,10 +32,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        var username = request.getParameter("username");
-        var password = request.getParameter("password");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
         log.info("Attempting authentication for user: {}", username);
-        log.info("Attempting authentication for password: {}", password);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -53,12 +53,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .sign(algorithm);
 //        String refreshToken = JWT.create()
 //                .withSubject(user.getUsername())
-//                .withExpiresAt(new Date(System.currentTimeMillis() + 30L * 24 * 60 * 60 * 1000)) // 30 days
+//                .withExpiresAt(new Date(System.currentTimeMillis() + 10L * 24 * 60 * 60 * 1000)) // 10 days
 //                .withIssuer(request.getRequestURL().toString())
 //                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 //                .sign(algorithm);
 
-        var mapTokens = new HashMap<String, String>();
+        Map<String, String> mapTokens = new HashMap<>();
         mapTokens.put("access_token", accessToken);
         mapTokens.put("expires_at", expireDate.getTime() + "");
 //        mapTokens.put("refresh_token", refreshToken);

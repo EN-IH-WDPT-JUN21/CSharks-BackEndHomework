@@ -79,7 +79,7 @@ public class UsersController {
     //  GET: http://localhost:8000/movie-app/users/authenticated
     @GetMapping("/authenticated")
     public Users getAuthenticatedUser(Authentication auth) {
-        var username = auth.getName();
+        String username = auth.getName();
         log.info("Getting authenticated user with the username: {}", username);
         return usersService.getUserByUsername(username);
     }
@@ -94,7 +94,7 @@ public class UsersController {
     public Users setAuthenticatedUser(Authentication auth,
                                       @RequestParam Optional<String> picture, @RequestParam Optional<String> bio,
                                       @RequestParam Optional<String> password) {
-        var username = auth.getName();
+        String username = auth.getName();
         log.info("Changing account details of user: {}", username);
         return usersService.setUserByUsername(username, picture, bio, password);
     }
@@ -109,7 +109,7 @@ public class UsersController {
     @PostMapping("/authenticated/createPlaylist")
     public Playlists createPlaylistForAuthenticatedUser(Authentication auth, @RequestBody PlaylistsDTO playlistsDTO) {
         log.info("New playlist being created");
-        var username = auth.getName();
+        String username = auth.getName();
         Users user = usersService.getUserByUsername(username);
         return playlistsService.createPlaylist(user, playlistsDTO);
     }
