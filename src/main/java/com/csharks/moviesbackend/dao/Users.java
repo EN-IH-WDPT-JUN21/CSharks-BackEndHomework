@@ -44,7 +44,7 @@ public class Users {
         this.username = registerUserDTO.getUsername();
         this.emailAddress = registerUserDTO.getEmailAddress();
         this.password = registerUserDTO.getPassword();
-        this.pictureUrl = "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png";
+        this.pictureUrl = "https://petbcc.ufscar.br/static/site2016/images/user.png";
         this.bio = "Add your bio here...";
         this.roles = new HashSet<>();
     }

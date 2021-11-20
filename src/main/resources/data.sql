@@ -19,9 +19,11 @@ CREATE TABLE IF NOT EXISTS `users_roles`(
     `users_id` bigint(20) NOT NULL,
     `roles_id` int(11) NOT NULL,
     PRIMARY KEY (`users_id`,`roles_id`),
+    UNIQUE KEY `user_role` (`users_id`,`roles_id`),
     FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`),
     FOREIGN KEY (`users_id`) REFERENCES `users` (`id`)
 );
+
 
 
 CREATE TABLE IF NOT EXISTS `playlists`(
@@ -42,6 +44,8 @@ CREATE TABLE IF NOT EXISTS `movies`(
 CREATE TABLE IF NOT EXISTS `playlists_titles`(
     `playlist_id` bigint(20) NOT NULL,
     `title_id` bigint(20) NOT NULL,
+    PRIMARY KEY (`playlist_id`,`title_id`),
+    UNIQUE KEY `playlist_title` (`playlist_id`,`title_id`),
     FOREIGN KEY (`title_id`) REFERENCES `movies` (`id`),
     FOREIGN KEY (`playlist_id`) REFERENCES `playlists` (`playlist_id`)
 );
@@ -50,8 +54,8 @@ CREATE TABLE IF NOT EXISTS `playlists_titles`(
 -- POPULATE TABLES IF NOT POPULATED
 INSERT IGNORE into users(id, bio, email_address, password, picture_url, username)
 values
-    ('1', 'Your bio here...', 'admin@sharkvision.com', '$2a$10$TrmBG111Bf9YKKHFS7xMyu6.V7xcol7SYYpn0EG3of0NeY2Gjlrje', 'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png', 'admin'),
-    ('2', 'Your bio here...', 'user@sharkvision.com', '$2a$10$uxFpSffU6zvxsPiqG7imrOj5JG9srioU3p1FjgX5zmYMTtt.GIFme', 'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png', 'user');
+    ('1', 'Your bio here...', 'admin@sharkvision.com', '$2a$10$TrmBG111Bf9YKKHFS7xMyu6.V7xcol7SYYpn0EG3of0NeY2Gjlrje', 'https://petbcc.ufscar.br/static/site2016/images/user.png', 'admin'),
+    ('2', 'Your bio here...', 'user@sharkvision.com', '$2a$10$uxFpSffU6zvxsPiqG7imrOj5JG9srioU3p1FjgX5zmYMTtt.GIFme', 'https://petbcc.ufscar.br/static/site2016/images/user.png', 'user');
 
 insert IGNORE into roles(id, name)
 values

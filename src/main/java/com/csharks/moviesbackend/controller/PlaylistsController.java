@@ -102,7 +102,12 @@ public class PlaylistsController {
     @PutMapping("/{playlistId}/add/{titleId}")
     public Playlists addMovie(Authentication auth, @PathVariable Long playlistId, @PathVariable String titleId) {
         if (playlistsService.isValidUserByPlaylistId(auth, playlistId)) {
-            return playlistsService.addMovieToPlaylist(playlistId, titleId);
+            int numberOfStoredMovies = playlistsRepository.findByPlaylistId(playlistId)
+                    .map(playlists -> playlists.getMovies().size())
+                    .orElse(0);
+            if (numberOfStoredMovies < 10) {
+                return playlistsService.addMovieToPlaylist(playlistId, titleId);
+            } else throw new ResponseStatusException(FORBIDDEN, "You can't add more than 10 movies to a playlist");
         } else
             throw new ResponseStatusException(FORBIDDEN, "You are not authorized to manage this playlist");
     }

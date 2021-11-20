@@ -1,11 +1,9 @@
 package com.csharks.moviesbackend.controller;
 
 
-import com.csharks.moviesbackend.dto.*;
-import com.csharks.moviesbackend.service.PlaylistsService;
-import com.csharks.moviesbackend.service.UsersService;
 import com.csharks.moviesbackend.dao.Playlists;
 import com.csharks.moviesbackend.dao.Users;
+import com.csharks.moviesbackend.dto.*;
 import com.csharks.moviesbackend.repository.UsersRepository;
 import com.csharks.moviesbackend.service.PlaylistsService;
 import com.csharks.moviesbackend.service.UsersService;
@@ -113,18 +111,18 @@ public class UsersController {
         Users user = usersService.getUserByUsername(username);
         return playlistsService.createPlaylist(user, playlistsDTO);
     }
-  
-      /*  http://localhost:8000/movie-app/users/1/createPlaylistWithMovie
-  {
-    "name": "Playlist#1",
-    "visible": true,
-    "movieId":"tt1375666"
-  } */
+
+    /*  http://localhost:8000/movie-app/users/1/createPlaylistWithMovie
+    {
+        "name": "Playlist#1",
+        "visible": true,
+        "movieId":"tt1375666"
+    } */
     @PostMapping("/authenticated/createPlaylistWithMovie")
-    public Playlists createPlaylistWithMovieId(Authentication auth, @RequestBody PlaylistWithMovieDTO playlistWithMovieDTO){
-        var username= auth.getName();
-        Optional<Users> user = usersRepository.findByUsername(username);
-        return playlistsService.createPlaylistWithMovie(user.get(), playlistWithMovieDTO);
+    public Playlists createPlaylistWithMovieId(Authentication auth, @RequestBody PlaylistWithMovieDTO playlistWithMovieDTO) {
+        String username = auth.getName();
+        Users user = usersService.getUserByUsername(username);
+        return playlistsService.createPlaylistWithMovie(user, playlistWithMovieDTO);
     }
 
 
@@ -148,7 +146,7 @@ public class UsersController {
     http://localhost:8000/movie-app/users/4/set?bio=M
     http://localhost:8000/movie-app/users/4/set?username=new_name
     http://localhost:8000/movie-app/users/4/set?password=new_pass
-     */
+    */
     @PatchMapping("/admin/{userId}/set")
     public Users setUser(@PathVariable Long userId,
                          @RequestParam Optional<String> picture, @RequestParam Optional<String> bio,
@@ -158,10 +156,10 @@ public class UsersController {
     }
 
     /*  http://localhost:8000/movie-app/users/1/createPlaylist
-      {
+    {
         "name": "Playlist#1",
         "visible": true
-      }
+    }
     */
     @PostMapping("/admin/{id}/createPlaylist")
     public Playlists createPlaylist(@PathVariable Long id, @RequestBody PlaylistsDTO playlistsDTO) {
