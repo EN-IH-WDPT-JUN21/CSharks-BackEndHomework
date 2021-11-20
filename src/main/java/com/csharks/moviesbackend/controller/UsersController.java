@@ -1,13 +1,10 @@
 package com.csharks.moviesbackend.controller;
 
+import com.csharks.moviesbackend.dto.*;
 import com.csharks.moviesbackend.service.PlaylistsService;
-import com.csharks.moviesbackend.dto.EmailDTO;
-import com.csharks.moviesbackend.dto.UsernameDTO;
 import com.csharks.moviesbackend.service.UsersService;
 import com.csharks.moviesbackend.dao.Playlists;
 import com.csharks.moviesbackend.dao.Users;
-import com.csharks.moviesbackend.dto.PlaylistsDTO;
-import com.csharks.moviesbackend.dto.RegisterUserDTO;
 import com.csharks.moviesbackend.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,6 +136,20 @@ http://localhost:8000/movie-app/users/4/set?password=new_pass
     public Playlists createPlaylist(@PathVariable Long id, @RequestBody PlaylistsDTO playlistsDTO){
         Optional<Users> user = usersRepository.findById(id);
         return playlistsService.createPlaylist(user.get(), playlistsDTO);
+    }
+
+
+    /*  http://localhost:8000/movie-app/users/1/createPlaylistWithMovie
+  {
+    "name": "Playlist#1",
+    "visible": true,
+    "movieId":"tt1375666"
+  } */
+    @PostMapping("/authenticated/createPlaylistWithMovie")
+    public Playlists createPlaylistWithMovieId(Authentication auth, @RequestBody PlaylistWithMovieDTO playlistWithMovieDTO){
+        var username= auth.getName();
+        Optional<Users> user = usersRepository.findByUsername(username);
+        return playlistsService.createPlaylistWithMovie(user.get(), playlistWithMovieDTO);
     }
 
 

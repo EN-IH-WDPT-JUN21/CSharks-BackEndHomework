@@ -89,6 +89,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(GET, "/movie-app/users/authenticated").hasAnyRole("ADMIN", "USER")
                 .mvcMatchers(PATCH, "/movie-app/users/authenticated/set").hasAnyRole("ADMIN", "USER")
                 .mvcMatchers(POST, "/movie-app/users/authenticated/createPlaylist").hasAnyRole("ADMIN", "USER")
+                .mvcMatchers(POST, "/movie-app/users/authenticated/createPlaylistWithMovie").hasAnyRole("ADMIN", "USER")
                 .mvcMatchers(GET, "/movie-app/playlists/user/authenticated").hasAnyRole("ADMIN", "USER")
 
                 // TODO JA - Define security for specific user playlist

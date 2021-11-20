@@ -44,11 +44,11 @@ public class Data {
 //        moviesRepository.save(new Movies(104l));
 //        moviesRepository.save(new Movies(105l));
 
-        usersRepository.save(new Users("User#1", "user1@gmail.com", bCryptPasswordEncoder.encode("user1"), "pictureURL", "M"));
+        usersRepository.save(new Users("User#1", "user1@gmail.com", bCryptPasswordEncoder.encode("user1"), "http://assets.stickpng.com/thumbs/580b57fbd9996e24bc43be10.png", "M"));
         usersService.addRoleToUser("User#1", "USER");
-        usersRepository.save(new Users("User#2", "user2@gmail.com", bCryptPasswordEncoder.encode("user2"), "pictureURL", "F"));
+        usersRepository.save(new Users("User#2", "user2@gmail.com", bCryptPasswordEncoder.encode("user2"), "http://assets.stickpng.com/thumbs/580b57fbd9996e24bc43be10.png", "F"));
         usersService.addRoleToUser("User#2", "USER");
-        usersRepository.save(new Users("User#3", "user3@gmail.com", bCryptPasswordEncoder.encode("user3"), "pictureURL", "M"));
+        usersRepository.save(new Users("User#3", "user3@gmail.com", bCryptPasswordEncoder.encode("user3"), "http://assets.stickpng.com/thumbs/580b57fbd9996e24bc43be10.png", "M"));
         usersService.addRoleToUser("User#3", "USER");
 
         usersRepository.save(new Users("Admin", "admin@gmail.com", bCryptPasswordEncoder.encode("admin"), "", ""));
